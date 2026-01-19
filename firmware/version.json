@@ -1,5 +1,5 @@
 {
-  "version": "1.0.7",
+  "version": "1.0.8",
   "url": "https://raw.githubusercontent.com/doanvv/Gateway_ESP32S3_OTA/main/firmware/firmware.bin",
-  "sha256": "0d302d74711adc7bcd4a044f8c94cbe90dfc156222b67cdd1a524bc32610e173"
+  "sha256": "45f721b0ebffa3f76257af5eced3e88005655d72a87b444ae62c6b751de92a24"
 }

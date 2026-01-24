@@ -1,0 +1,3009 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="app-version" content="audio-v2">
+
+<title>Call System</title>
+
+<style>
+/* ===============================
+   THEME TOKENS (LIGHT)
+   =============================== */
+:root {
+  --primary:#2563eb;
+  --primary-hover:#1d4ed8;
+
+  --bg:#f4f6f8;
+  --card:#ffffff;
+  --border:#d1d5db;
+
+  --text:#111827;
+  --muted:#6b7280;
+
+  --success:#16a34a;
+  --warning:#f59e0b;
+  --danger:#a30d0d;
+
+  --radius-sm:6px;
+  --radius:10px;
+  --radius-lg:14px;
+
+  --input-h:44px;
+}
+
+/* ===============================
+   DARK MODE TOKENS
+   =============================== */
+
+
+/* ===============================
+   BASE
+   =============================== */
+* { box-sizing:border-box }
+
+body {
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* ===============================
+   TOP BAR
+   =============================== */
+.topbar {
+  height:56px;
+  background:var(--card);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  position:fixed;
+  top:0;left:0;right:0;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+  z-index:100;
+}
+
+.logo {
+  font-weight:700;
+  color:var(--primary);
+}
+
+.nav-icons button {
+  background:none;
+  border:none;
+  font-size:20px;
+  margin-left:14px;
+  cursor:pointer;
+  color:var(--muted);
+}
+.nav-icons button.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.nav-icons button:hover {
+  color:var(--primary);
+}
+
+/* ===============================
+   LAYOUT
+   =============================== */
+.container {
+  padding:72px 16px 16px;
+}
+
+.page { display:none; }
+.page.active { display:block; }
+
+/* ===============================
+   COMMON COMPONENTS
+   =============================== */
+.card {
+  background:var(--card);
+  border-radius:var(--radius-lg);
+  padding:16px;
+  margin-bottom:16px;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+
+h2,h3,h4 {
+  margin:0 0 14px;
+}
+
+label {
+  font-size:13px;
+  font-weight:600;
+}
+
+input, select {
+  width:100%;
+  height:var(--input-h);
+  margin-top:6px;
+  padding:0 12px;
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+}
+
+button {
+  height:var(--input-h);
+  border-radius:var(--radius);
+  border:none;
+  padding:0 16px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  background:var(--primary);
+  color:#fff;
+}
+
+button:hover {
+  background:var(--primary-hover);
+}
+
+button:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+/* ===============================
+   NETWORK PAGE OVERRIDE
+   =============================== */
+#page-network .card {
+  max-width:420px;
+  margin:32px auto;
+  padding:24px;
+}
+
+#page-network h2 {
+  text-align:center;
+}
+
+#page-network .status {
+  margin-top:16px;
+  padding:12px;
+  background:rgba(255,255,255,.06);
+  border-radius:var(--radius);
+  font-size:13px;
+}
+
+#page-network .link {
+  font-family:monospace;
+  padding:6px 8px;
+  background:rgba(59,130,246,.15);
+  border-radius:var(--radius-sm);
+  word-break:break-all;
+}
+  /* ===== HOME PAGE GRID FORM ===== */
+  /* ================= HOME PAGE ================= */
+
+
+
+/* ===============================
+   PAGE BUTTONS – CLEAN LAYOUTrun
+   =============================== */
+
+#page-buttons .card h3,
+#page-buttons .card h4 {
+  margin-bottom: 12px;
+}
+
+/* ---------- FORM GRID ---------- */
+#page-buttons .form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+#page-buttons .form-grid .span-2 {
+  grid-column: span 2;
+}
+#page-buttons .form-grid > div {
+  display: flex;
+  flex-direction: column;
+}
+
+#page-buttons .form-actions {
+  margin-top: 16px;
+}
+
+/* ---------- TABLE ---------- */
+#page-buttons table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+#page-buttons th,
+#page-buttons td {
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 13px;
+}
+
+#page-buttons th {
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+}
+
+#page-buttons td {
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  word-break: break-word;
+}
+
+#page-buttons th:nth-child(3),
+#page-buttons td:nth-child(3) {
+  text-align: left;
+}
+
+/* ---------- ROW STATE ---------- */
+#page-buttons tr.learning {
+  background: rgba(250, 204, 21, 0.25);
+}
+
+#page-buttons tr.learned {
+  background: rgba(34, 197, 94, 0.18);
+}
+
+/* ---------- BADGES ---------- */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-ev {
+  background: #fde68a;
+  color: #92400e;
+}
+
+.badge-lora {
+  background: #bfdbfe;
+  color: #1e40af;
+}
+
+/* ---------- ACTION BUTTONS ---------- */
+#page-buttons .btn-learn {
+  width: 44px;
+  height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+#page-buttons .btn-edit {
+  width: 44px;
+  height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+  #page-buttons .btn-save {
+  width: 44px;
+  height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+/* ---------- COUNTDOWN ---------- */
+#page-buttons .countdown {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+/* ===== BIG DELETE BUTTON ===== */
+#page-buttons .btn-delete {
+  width: 44px;
+  height: 34px;
+  font-size: 18px;
+  border-radius: 12px;
+  background: var(--danger);
+  color: #fff;
+}
+
+#page-buttons .btn-delete:hover {
+  background: #b91c1c;
+}
+
+
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+  .call-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .call-card {
+    height: auto;         /* mobile cho phép cao hơn */
+  }
+}
+/* =======================
+
+   ======================= */
+/* ===== TYPE BADGE ===== */
+.badge {
+  display: inline-block;
+  max-width: 80px;              /* 🔒 khóa chiều rộng */
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge-ev {
+  background: #fde68a;
+  color: #92400e;
+}
+
+.badge-lora {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+/* DARK MODE */
+[data-theme="dark"] .badge-ev {
+  background: #78350f;
+  color: #fde68a;
+}
+[data-theme="dark"] .badge-lora {
+  background: #1e3a8a;
+  color: #bfdbfe;
+}
+
+/* ===== DESKTOP ACTION ===== */
+/* ===== ACTION ROW – DESKTOP ===== */
+/* ===== DESKTOP ACTION CELL ===== */
+.td-action {
+  text-align: center;
+  vertical-align: middle;
+  padding-left: 8px;   /* 👈 lùi nhẹ sang phải */
+}
+
+.action-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-row button {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 8px;
+
+  display: flex;              /* 🔥 QUAN TRỌNG */
+  align-items: center;        /* căn giữa dọc */
+  justify-content: center;    /* căn giữa ngang */
+
+  line-height: 1;             /* 🔥 chặn icon nhảy */
+  font-size: 18px;            /* đồng đều icon */
+}
+
+.btn-stop {
+  background: #bb2020 !important;
+  color: #fff;
+}
+/* ===== ROW LEARNING ===== */
+.row-learning {
+  background: #fff7ed;              /* cam nhạt */
+  outline: 2px solid #f97316;
+}
+
+[data-theme="dark"] .row-learning {
+  background: #431407;
+  outline-color: #fb923c;
+}
+
+
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+.action-row,
+  .action-row * {
+    pointer-events: auto;
+  }
+  /* FORM ADD */
+  #page-buttons .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  #page-buttons input,
+  #page-buttons select,
+  #page-buttons button {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  /* TABLE -> CARD MODE */
+  #btnTable thead {
+    display: none;
+  }
+
+  #btnTable td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 0;
+    border: none;
+    position: relative;
+    text-align: left;
+  }
+
+  #btnTable td::before {
+    content: attr(data-label);
+    flex: 0 0 90px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    pointer-events: none;   /* 🔥 FIX TOUCH */
+  }
+
+  #btnTable td > * {
+    flex: 1;
+  }
+
+  /* ACTION RIÊNG */
+  #btnTable td[data-label="Action"] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  /* 1️⃣ ẨN LABEL "Action" */
+  #btnTable td[data-label="Action"]::before {
+    display: none;
+  }
+
+  /* 2️⃣ GIẢM KHOẢNG TRỐNG TRÊN CELL ACTION */
+  #btnTable td[data-label="Action"] {
+    padding-top: 0;
+    margin-top: 0px;   /* 👈 kéo nút lên sát Type */
+  }
+
+  /* 3️⃣ KÉO NÚT LÊN GẦN TYPE */
+  #btnTable td[data-label="Type"] {
+    padding-bottom: 4px;
+  }
+
+  /* 4️⃣ ACTION ROW KHÔNG CÓ KHOẢNG TRẮNG THỪA */
+  #btnTable td[data-label="Action"] .action-row {
+    margin-top: 0;
+  }
+
+  /* 5️⃣ ẨN COUNTDOWN KHI RỖNG (TRÁNH CHIẾM CHỖ) */
+  #btnTable td[data-label="Action"] .countdown:empty {
+    display: none;
+  }
+  .action-row {
+    flex-direction: row;    /* 📱 mobile: ngang */
+    gap: 8px;
+    width: 100%;
+  }
+
+  
+}
+.admin-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.admin-modal.hidden { display: none; }
+
+.admin-box {
+  background: #fff;
+  width: 320px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.3);
+}
+
+.admin-box h3 {
+  margin: 0 0 12px;
+}
+
+.admin-box input {
+  width: 100%;
+  height: 42px;
+  margin-bottom: 12px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-actions button {
+  flex: 1;
+}
+
+.admin-actions .cancel {
+  background: #e5e7eb;
+  color: #111;
+}
+
+.admin-error {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #b91c1c;
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="logo">🔔 CALL SYSTEM</div>
+  <div class="nav-icons">
+    <button onclick="showPage('home')">🏠</button>
+    <button onclick="showPage('history')">📊</button>
+    <button onclick="showPage('buttons')">🔘</button>
+    <button onclick="showPage('network')">🌐</button>
+    <button onclick="showPage('settings')">⚙️</button>
+    <button onclick="showPage('audio')">🔊</button>
+  </div>
+</header>
+
+<main class="container">
+</main>
+<div id="adminModal" class="admin-modal hidden">
+  <div class="admin-box">
+    <h3>🔒 Xác thực quản trị</h3>
+    <input type="password" id="adminPass" placeholder="Nhập mật khẩu admin">
+    <div class="admin-actions">
+      <button onclick="submitAdmin()">Đăng nhập</button>
+      <button class="cancel" onclick="closeAdmin()">Hủy</button>
+    </div>
+    <div id="adminError" class="admin-error"></div>
+  </div>
+</div>
+<div id="otaConfirmModal" class="admin-modal hidden">
+  <div class="admin-box">
+    <h3>⬆️ Cập nhật firmware</h3>
+    <p id="otaConfirmText"></p>
+
+    <div class="admin-actions">
+      <button onclick="confirmOTA()">Cập nhật</button>
+      <button class="cancel" onclick="cancelOTA()">Bỏ qua</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===============================
+   PAGE SWITCH
+   =============================== */
+   let prevPage = null;
+
+function showPage(name){
+    if (otaLocked) {
+    alert("⛔ Đang cập nhật firmware, vui lòng chờ");
+    return;
+  }
+
+  if (ADMIN_PAGES.includes(name) && !isAdmin()) {
+    showAdminLogin(() => showPage(name));
+    return;
+  }
+  currentPage = name;
+  localStorage.setItem("currentPage", name);
+  // 👉 GỌI HIDE PAGE CŨ (TRƯỚC)
+  if (prevPage === "network" && typeof onPageNetworkHide === "function") {
+    onPageNetworkHide();
+  }
+
+  // Ẩn tất cả page
+  document.querySelectorAll('.page')
+    .forEach(p => p.classList.remove('active'));
+
+  // Hiện page mới
+  const p = document.getElementById('page-' + name);
+  if(p) p.classList.add('active');
+  localStorage.setItem("currentPage", name);
+
+  // 👉 GỌI SHOW PAGE MỚI (SAU)
+  if (name === "network" && typeof onPageNetworkShow === "function") {
+    onPageNetworkShow();
+  }
+
+  if (name === "buttons" && typeof onPageButtonsShow === "function") {
+    onPageButtonsShow();
+  }
+  if (name === "audio" && typeof onPageAudioShow === "function") {
+  onPageAudioShow();
+  }
+  if (name === "settings" && typeof onPageSettingsShow === "function") {
+  onPageSettingsShow();
+  }
+  if (name === "history" && typeof onPageHistoryShow === "function") {
+  onPageHistoryShow();
+  }
+  // 👉 CẬP NHẬT prevPage CUỐI CÙNG
+  prevPage = name;
+}
+/*
+document.addEventListener("DOMContentLoaded", () => {
+  const last = localStorage.getItem("currentPage") || "home";
+  showPage(last);
+});
+
+
+const ws = new WebSocket(`ws://${location.host}/ws`);
+
+ws.addEventListener("open", () => {
+  console.log("WS connected");
+});
+*/
+document.addEventListener("DOMContentLoaded", () => {
+  const last = localStorage.getItem("currentPage") || "home";
+  showPage(last);
+  connectWS();
+  const emp = localStorage.getItem("employee") || "";
+  employeeInput.value = emp;
+});
+function retryWS() {
+  if (wsRetry < WS_RETRY_MAX) {
+    wsRetry++;
+    console.log(`🔄 WS retry ${wsRetry}/${WS_RETRY_MAX}`);
+    setTimeout(connectWS, WS_RETRY_DELAY);
+  } else {
+    console.error("🛑 WS reconnect failed → reload page");
+
+    // tránh reload nhiều lần
+    if (!wsReloadTimer) {
+      wsReloadTimer = setTimeout(() => {
+        location.reload();
+      }, 1500);
+    }
+  }
+}
+let ws;
+let wsRetry = 0;
+const WS_RETRY_MAX = 5;
+const WS_RETRY_DELAY = 1000; // ms
+let wsReloadTimer = null;
+
+function connectWS() {
+  ws = new WebSocket(`ws://${location.host}/ws`);
+
+  ws.onopen = () => {
+  console.log("✅ WS connected");
+  wsRetry = 0;
+
+  if (wsReloadTimer) {
+    clearTimeout(wsReloadTimer);
+    wsReloadTimer = null;
+  }
+
+  flushWsQueue(); // 🔥 GỬI LỆNH TỒN
+};
+
+
+  ws.onmessage = e => {
+    // ===== code xử lý WS của bạn =====
+    handleWSMessage(e);
+  };
+
+  ws.onclose = () => {
+    console.warn("⚠️ WS disconnected");
+    retryWS();
+  };
+
+  ws.onerror = () => {
+    console.warn("❌ WS error");
+    ws.close();
+  };
+}
+/* ===============================
+   WS ROUTER – PHÂN PHỐI MESSAGE
+   =============================== */
+   function handleWSMessage(e) {
+   if (typeof e.data !== "string") {
+    console.warn("⚠️ Non-text WS frame ignored", e.data);
+    return;
+  }
+
+  let d;
+  try {
+    d = JSON.parse(e.data);
+  } catch (err) {
+    console.error("❌ Invalid JSON:", e.data);
+    return;
+  }
+console.log("[WS] RX object:", d);
+console.log("[WS] RX type:", d.type);
+switch (d.type) {
+
+  /* ===== NETWORK PAGE ===== */
+  case "scan":
+    if (typeof onWifiScan === "function") {
+      onWifiScan(d);
+    }
+    break;
+
+  case "status":
+    if (typeof onWifiStatus === "function") {
+      onWifiStatus(d);
+    }
+    break;
+
+  /* ===== BUTTONS PAGE ===== */
+  case "button_list":
+    loadButtonList(d.list);
+
+    if (autoLearnNext && Array.isArray(d.list) && d.list.length > 0) {
+      const last = d.list[d.list.length - 1];
+      autoLearnNext = false;
+      // startLearnUI(last.id);
+    }
+    break;
+
+  case "learn_result": {
+   /* const b = buttons.find(x => x.id === d.id);
+    if (b) {
+      b.code = d.code;
+      b.type = d.src;
+      renderTable();
+    }
+      */
+    loadButtonsHttp();
+    break;
+  }
+
+  case "button_press":
+    if (typeof onButtonPressed === "function") {
+      onButtonPressed(d);
+    }
+    break;
+
+  case "learn_countdown":
+    showCountdown(d.id, d.sec);
+    break;
+
+  case "start_learn":
+    startLearnUI(d.id, d.sec);
+    break;
+
+  case "stop_learn":
+    WsstopLearning();
+    break;
+/*
+  case "audio_list":
+    audioTotal = d.total;
+    renderAudioList(d.files, true);
+    audioOffset += d.files.length;
+
+    if (audioOffset < audioTotal) {
+      setTimeout(loadMoreAudio, 80); // 🔥 load tiếp
+    }
+  break;
+  */
+  case "settings":
+  applySettings(d);
+  break;
+  case "settings_saved":
+  showSettingsSaved(d.group);
+  break;
+  case "settings_saved":
+  showSettingsSaved(d.group);
+  break;
+  case "test_result":
+  showTestResult(d);
+  break;
+  case "ota_state":
+  if (d.state === "start") 
+    {
+      lockUIForOTA();
+      document.getElementById("otaOverlayBar").style.width = "0%";
+      document.getElementById("otaOverlayPercent").innerText = "0%";
+      document.getElementById("otaOverlayStatus").innerText =
+        "⬇️ Đang tải firmware...";
+    }
+
+    if (d.state === "writing") 
+    {
+      document.getElementById("otaOverlayStatus").innerText =
+        "✍️ Đang ghi firmware...";
+    }
+
+    if (d.state === "done") 
+    {
+      document.getElementById("otaOverlayBar").style.width = "100%";
+      document.getElementById("otaOverlayPercent").innerText = "100%";
+      document.getElementById("otaOverlayStatus").innerText =
+        "✅ Cập nhật xong – thiết bị đang khởi động lại...";
+
+      setTimeout(() => {
+        location.reload();
+      }, 4000);
+    }
+    if (d.state === "uptodate") 
+    {
+      // không khóa UI
+      unlockUIAfterOTA?.();
+      console.log("✅ OTA UPTODATE RECEIVED", d);
+      showToast(
+        `✅ Firmware đã là bản mới nhất (v${d.version || "?"})`
+      );
+    }
+    if (d.state === "error") 
+    {
+      document.getElementById("otaOverlayStatus").innerText =
+        "❌ OTA thất bại";
+      setTimeout(unlockUIAfterOTA, 2000);
+    }
+    if (d.state === "available") 
+    {
+    otaCandidate = d;
+
+    document.getElementById("otaConfirmText").innerText =
+      `🆕 Có phiên bản firmware mới (v${d.version})\n` +
+      `Phiên bản hiện tại: v${d.current}\n\n` +
+      `Bạn có muốn cập nhật không?`;
+
+    document.getElementById("otaConfirmModal")
+      .classList.remove("hidden");
+    }
+
+  break;
+
+  case "ota_progress": {
+    const p = d.percent || 0;
+    document.getElementById("otaOverlayBar").style.width = p + "%";
+    document.getElementById("otaOverlayPercent").innerText = p + "%";
+    break;
+  }
+  case "webui_progress": {
+    otaOverlayBar.style.width = d.percent + "%";
+    otaOverlayPercent.innerText = d.percent + "%";
+    otaOverlayStatus.innerText = d.msg || "Đang tải...";
+    break;
+  }
+  case "webui_done": 
+  {
+    otaOverlayBar.style.width = "100%";
+    otaOverlayPercent.innerText = "100%";
+    otaOverlayStatus.innerText = d.ok
+      ? "✅ Cập nhật giao diện thành công"
+      : "❌ Cập nhật thất bại";
+
+    setTimeout(() => {
+      unlockUIAfterOTA();
+      if (d.ok) location.reload();
+    }, 1200);
+    break;
+  }
+  case "history":
+  {
+    historyBuffer += d.chunk;
+  } 
+  break;
+  case "history_done":
+  {
+  renderHistoryTable(historyBuffer);
+  }
+  break;
+  default:
+    // Không có type → kiểm tra payload đặc biệt
+    break;
+}
+
+/* ===== HOME PAGE (KHÔNG PHỤ THUỘC type) ===== */
+if (Array.isArray(d.active)) {
+  renderActiveCalls(d.active);
+}
+
+
+    /*
+    if(d.display && d.display.active === true){
+     console.log("✅ [DISPLAY] enter addCallCard", d);
+        addCallCard({
+            id: d.display.id,
+            loc: d.display.loc,
+            num: d.display.num,
+            pri: d.display.priority ,
+            req: d.display.request,
+            stt: d.display.status,
+            time: new Date().toLocaleTimeString()
+        });
+    }*/
+}
+
+/* ===============================
+   WS SEND QUEUE (NO DROP)
+   =============================== */
+
+   let wsBusy = false;
+const wsQueue = [];
+const WS_SEND_DELAY = 120; // ms – chống flood ESP32
+
+function wsSendSafe(obj) {
+  if (otaLocked) {
+  console.warn("🚫 WS blocked during OTA", obj);
+  return;
+}
+  wsQueue.push(obj);
+  flushWsQueue();
+}
+
+function flushWsQueue() {
+  if (wsBusy) return;
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  if (wsQueue.length === 0) return;
+
+  wsBusy = true;
+
+  const obj = wsQueue.shift();
+  const json = JSON.stringify(obj);
+
+  console.log("📤 WS send:", obj.cmd || obj);
+  ws.send(json);
+
+  setTimeout(() => {
+    wsBusy = false;
+    flushWsQueue(); // 🔁 gửi tiếp
+  }, WS_SEND_DELAY);
+}
+
+const ADMIN_PAGES = ["buttons", "network", "settings", "audio"];
+
+function isAdmin() {
+  return sessionStorage.getItem("isAdmin") === "1";
+}
+
+let adminNextPage = null;
+const ADMIN_PASSWORD = "123456a@"; // 🔑 đổi theo ý bạn
+
+function showAdminLogin(next) {
+  adminNextPage = next;
+  document.getElementById("adminPass").value = "";
+  document.getElementById("adminError").innerText = "";
+  document.getElementById("adminModal").classList.remove("hidden");
+}
+
+function closeAdmin() {
+  document.getElementById("adminModal").classList.add("hidden");
+}
+
+function submitAdmin() {
+  const p = document.getElementById("adminPass").value;
+  if (p === ADMIN_PASSWORD) {
+    sessionStorage.setItem("isAdmin", "1");
+    closeAdmin();
+    if (adminNextPage) adminNextPage();
+  } else {
+    document.getElementById("adminError").innerText = "❌ Sai mật khẩu";
+  }
+}
+let otaCandidate = null;
+function showToast(msg, ms = 3000) {
+  const t = document.createElement("div");
+  t.innerText = msg;
+
+  Object.assign(t.style, {
+    position: "fixed",
+    top: "16px",
+    left: "50%",
+    transform: "translateX(-50%)",
+
+    background: "#16a34a",
+    color: "#fff",
+    padding: "12px 18px",
+    borderRadius: "12px",
+    fontSize: "14px",
+    fontWeight: "600",
+    zIndex: 100000,
+
+    boxShadow: "0 8px 24px rgba(0,0,0,.25)",
+    maxWidth: "90%",
+    textAlign: "center"
+  });
+
+  document.body.appendChild(t);
+
+  setTimeout(() => {
+    t.style.opacity = "0";
+    t.style.transition = "opacity .3s ease";
+    setTimeout(() => t.remove(), 300);
+  }, ms);
+}
+function confirmOTA() {
+  if (!otaCandidate) return;
+
+  document.getElementById("otaConfirmModal")
+    .classList.add("hidden");
+
+  wsSendSafe({
+    cmd: "ota_update",
+    url: otaCandidate.url,
+    sha256: otaCandidate.sha256
+  });
+
+  otaCandidate = null;
+}
+function cancelOTA() {
+  document.getElementById("otaConfirmModal")
+    .classList.add("hidden");
+
+  showToast("ℹ️ Đã bỏ qua cập nhật firmware");
+
+  otaCandidate = null;
+}
+
+
+</script>
+
+</body>
+</html>
+<section id="page-buttons" class="page">
+
+  <div class="card">
+    <h3>🔘 Quản lý nút bấm</h3>
+    <p style="color:var(--muted)">
+      Lưu thông tin nút nhấn chuông cho hệ thống
+    </p>
+  </div>
+
+  <!-- ===== ADD ===== -->
+  <div class="card">
+    <h4>Thêm nút mới</h4>
+
+    <div class="form-grid">
+      <div>
+        <label>Priority</label>
+        <select id="btn_prio">
+          <option value="0">0 (Tắt cảnh báo)</option>
+          <option value="1">1 (Thông thường)</option>
+          <option value="2">2 (Cảnh báo)</option>
+          <option value="3" selected>3 (Ưu tiên)</option>
+          <option value="4">4 (Khẩn cấp)</option>
+          <option value="5">5 (Báo động đỏ)</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Location</label>
+        <input id="btn_location" placeholder="Khoa cấp cứu">
+      </div>
+
+      <div>
+        <label>Number</label>
+        <input id="btn_num" placeholder="G001">
+      </div>
+
+        <div>
+        <label>Request 1</label>
+        <input id="v1" value="gọi bác sĩ">
+        </div>
+
+        <div>
+        <label>Request 2</label>
+        <input id="v2" value="--">
+        </div>
+
+        <div>
+        <label>Request 3</label>
+        <input id="v3" value="--">
+        </div>
+
+        <div>
+        <label>Request 4</label>
+        <input id="v4" value="--">
+        </div>
+
+        <div>
+        <label>Request 5</label>
+        <select id="v5">
+            <option value="Hủy gọi">Hủy gọi</option>
+            <option value="Hoàn tất">Hoàn tất</option>
+        </select>
+        </div>
+        <div class="span-2">
+        <label>RF code</label>
+        <input id="btn_rfcode"
+                placeholder="0x12345678;0xAABBCCDD">
+        </div>
+
+    </div>
+
+    <div class="form-actions">
+      <button onclick="addButton()">➕ Thêm nút</button>
+    </div>
+  </div>
+
+  <!-- ===== LIST ===== -->
+  <div class="card">
+    <h4>Danh sách nút</h4>
+
+    <table id="btnTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Priority</th>
+          <th>Location</th>
+          <th>Number</th>
+          <th>F1</th><th>F2</th><th>F3</th><th>F4</th><th>F5</th>
+          <th>RF CODE</th>
+          <th>Mã</th>
+          <th>Loại</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+<script>
+let buttons = [];
+let learningId = 0;
+let autoLearnNext = false;
+let countdownTimer = null;
+let editingId = 0;
+let editTimer = null;
+const EDIT_TIMEOUT = 30; // giây
+let countdownMap = {};
+let renderScheduled = false;
+/* ===== INIT request ===== */
+
+/*
+
+["v1","v2","v3","v4","v5"].forEach((id,i)=>{
+  const s=document.getElementById(id);
+  request.forEach(v=>{
+    const o=document.createElement("option");
+    o.value=v; o.text=v;
+    s.add(o);
+  });
+  s.value=request[i];
+});
+*/
+/* ===== ADD ===== */
+function addButton(){
+  autoLearnNext = true;
+  if(!isValidRFCode(btn_rfcode.value)){
+  alert("Code phải dạng 0x12345678;0xAABBCCDD");
+  return;
+}
+
+  wsSendSafe(({
+    cmd:"add_button",
+    priority: btn_prio.value,
+    location: btn_location.value,
+    num: btn_num.value,
+    v1:v1.value, v2:v2.value, v3:v3.value, v4:v4.value, v5:v5.value,
+    rfcode: btn_rfcode.value.trim()
+  }));
+  setTimeout(loadButtonsHttp, 300); // reload nhẹ
+}
+
+/* ===== LEARN ===== */
+function learnRow(id){
+  learningId = id;
+  wsSendSafe(({ cmd:"learn_button", id }));
+}
+
+/* ===== DELETE ===== */
+function delBtn(id){
+    if (learningId > 0) {
+        stopLearning();
+    }
+  if(!confirm("Xóa nút này?")) return;
+  wsSendSafe(({ cmd:"delete_button", id }));
+  setTimeout(loadButtonsHttp, 300);
+}
+function editRow(id){
+  // 👉 nếu đang learn → stop
+  if (learningId > 0) {
+    stopLearning();
+  }
+
+  // 👉 nếu đang edit dòng khác → save TRƯỚC
+  if (editingId > 0 && editingId !== id) {
+    saveEdit(editingId);
+  }
+
+  editingId = id;
+  safeRenderTable();
+
+  if(editTimer) clearTimeout(editTimer);
+  editTimer = setTimeout(()=>{
+    console.log("⏱ Auto save edit timeout");
+    saveEdit(id);
+    safeRenderTable();
+  }, EDIT_TIMEOUT * 1000);
+}
+
+
+
+/* ===== RENDER ===== */
+function loadButtonList(list){
+  if (!Array.isArray(list)) return;
+
+  const oldMap = new Map();
+  buttons.forEach(b => oldMap.set(b.id, b));
+
+  buttons = list.map(raw => {
+    const old = oldMap.get(raw.id) || {};
+    return {
+      id: Number(raw.id),
+      pri: Number(raw.pri ?? old.pri ?? 0),
+      loc: raw.loc ?? old.loc ?? "",
+      num: raw.num ?? old.num ?? "",
+      v1: raw.v1 ?? old.v1 ?? "",
+      v2: raw.v2 ?? old.v2 ?? "",
+      v3: raw.v3 ?? old.v3 ?? "",
+      v4: raw.v4 ?? old.v4 ?? "",
+      v5: raw.v5 ?? old.v5 ?? "",
+      rfcode: raw.rfcode ?? old.rfcode ?? "",
+      code: raw.code ?? old.code ?? 0,
+      type: raw.type ?? old.type ?? ""
+    };
+  });
+
+  // 🔒 KHÔNG reset editingId
+  safeRenderTable();
+}
+
+function renderTable(){
+  const tb = document.querySelector("#btnTable tbody");
+  tb.innerHTML = "";
+
+  buttons.forEach(b => {
+    const isEdit = (editingId === b.id);
+
+    const badge =
+      b.type === "EV1527"
+        ? '<span class="badge badge-ev">EV1527</span>'
+        : b.type === "LORA"
+          ? '<span class="badge badge-lora">LoRa</span>'
+          : "--";
+
+    const cd = countdownMap[b.id] !== undefined
+      ? `⏳ ${countdownMap[b.id]}s`
+      : "";
+
+    const tr = document.createElement("tr");
+    if (learningId === b.id) {
+    tr.classList.add("row-learning");
+    }
+    tr.innerHTML = `
+      <td data-label="ID">${b.id}</td>
+      <td data-label="Priority">${isEdit ? prioritySelect(b.id, b.pri) : b.pri}</td>
+      <td data-label="Location">${isEdit ? `<input id="e_loc_${b.id}" value="${b.loc||""}">` : (b.loc||"")}</td>
+      <td data-label="Number">${isEdit ? `<input id="e_num_${b.id}" value="${b.num||""}">` : (b.num||"")}</td>
+      <td data-label="F1">${isEdit ? `<input id="e_v1_${b.id}" value="${b.v1||""}">` : (b.v1||"")}</td>
+      <td data-label="F2">${isEdit ? `<input id="e_v2_${b.id}" value="${b.v2||""}">` : (b.v2||"")}</td>
+      <td data-label="F3">${isEdit ? `<input id="e_v3_${b.id}" value="${b.v3||""}">` : (b.v3||"")}</td>
+      <td data-label="F4">${isEdit ? `<input id="e_v4_${b.id}" value="${b.v4||""}">` : (b.v4||"")}</td>
+
+      <td data-label="F5">
+        ${isEdit
+          ? `<select id="e_v5_${b.id}">
+               <option value="Hủy gọi">Hủy gọi</option>
+               <option value="Hoàn tất">Hoàn tất</option>
+             </select>`
+          : (b.v5 || "")
+        }
+      </td>
+        <td data-label="RF OUT">
+        ${isEdit
+            ? `<input id="e_rfcode_${b.id}" value="${b.rfcode || ""}">`
+            : (b.rfcode || "")
+        }
+        </td>
+
+      <td data-label="Code">${b.code ? "0x"+Number(b.code).toString(16) : "--"}</td>
+      <td data-label="Type">${badge}</td>
+
+      <td data-label="Action" colspan="3" class="td-action">
+        <div class="action-row">
+
+            <!-- 🔊 PLAY VOICE -->
+            <button class="btn-play" onclick="playVoice(${b.id})" title="Play voice">
+                ▶️
+            </button>
+
+            <!-- 📡 TEST RF -->
+            <button class="btn-test" onclick="testRF(${b.id})" title="Test RF">
+                📡
+            </button>
+
+            <!-- 🎧 LEARN -->
+            <button
+                class="btn-learn ${learningId === b.id ? 'btn-stop' : ''}"
+                onclick="toggleLearn(${b.id})" title="${learningId === b.id ? 'Stop learn' : 'Learn button'}">
+                ${learningId === b.id ? '⏹' : '🎧'}
+            </button>
+
+            ${isEdit
+                ? `<button class="btn-save" onclick="saveEdit(${b.id})" title="Save Button">💾</button>`
+                : `<button class="btn-edit" onclick="editRow(${b.id})" title="Edit Button">✏️</button>`}
+
+            <button class="btn-delete" onclick="delBtn(${b.id})" title="Edit Button">🗑</button>
+            </div>
+
+
+        <div class="countdown" id="cd_${b.id}">${cd}</div>
+      </td>
+
+    `;
+
+    tb.appendChild(tr);
+
+    if(isEdit){
+      setTimeout(()=>{
+        const pri = document.getElementById(`e_pri_${b.id}`);
+        if(pri) pri.value = b.pri;
+        const v5 = document.getElementById(`e_v5_${b.id}`);
+        if(v5) v5.value = b.v5 || "Hủy gọi";
+      },0);
+    }
+  });
+}
+
+function prioritySelect(id, val){
+  return `<select id="e_pri_${id}">
+    ${[0,1,2,3,4,5].map(v =>
+      `<option value="${v}" ${String(v) === String(val) ? "selected" : ""}>${v}</option>`
+    ).join("")}
+  </select>`;
+}
+
+
+function saveEdit(id){
+  const pri = document.getElementById(`e_pri_${id}`);
+  if (!pri) return;
+
+  const rf = document.getElementById(`e_rfcode_${id}`)?.value || "";
+  if(!isValidRFCode(rf)){
+    alert("RF Code không hợp lệ");
+    return;
+  }
+
+  wsSendSafe({
+    cmd: "update_button",
+    id: id,
+    priority: pri.value,
+    location: document.getElementById(`e_loc_${id}`)?.value || "",
+    num: document.getElementById(`e_num_${id}`)?.value || "",
+    v1: document.getElementById(`e_v1_${id}`)?.value || "",
+    v2: document.getElementById(`e_v2_${id}`)?.value || "",
+    v3: document.getElementById(`e_v3_${id}`)?.value || "",
+    v4: document.getElementById(`e_v4_${id}`)?.value || "",
+    v5: document.getElementById(`e_v5_${id}`)?.value || "",
+    rfcode: rf.trim()
+  });
+
+  editingId = 0;
+  if(editTimer){
+    clearTimeout(editTimer);
+    editTimer = null;
+  }
+  editingId = 0;
+
+setTimeout(loadButtonsHttp, 200);
+}
+
+
+function cancelEdit(){
+  editingId = -1;
+  safeRenderTable();
+}
+function commitEditIfNeeded(){
+  if (editingId <= 0) return;
+
+  const input = document.getElementById(`e_pri_${editingId}`);
+  if (!input) {
+    console.warn("⚠️ commitEdit skipped, no edit row");
+    editingId = 0;
+    return;
+  }
+
+  console.log("💾 Auto-save edit ID =", editingId);
+  saveEdit(editingId);
+}
+
+
+function startLearnUI(id , sec =10){
+console.log("🎧 Start learning UI ID =", id);
+if(learningId > 0 && learningId !== id){
+    delete countdownMap[learningId];
+  }
+commitEditIfNeeded();
+ 
+  learningId = id;
+safeRenderTable();
+ const el = document.getElementById("cd_" + id);
+  if(!el) return;
+  
+  if(sec > 0){
+    el.style.display = "block";
+    el.innerText = "⏳ " + sec + "s";
+  } else {
+    el.innerText = "";
+    el.style.display = "none";
+  } 
+}
+function stopLearning() {
+  if (learningId === 0) return;
+
+  console.log("🛑 Stop learning ID =", learningId);
+
+  wsSendSafe(({
+    cmd: "learn_stop",
+    id: learningId
+  }));
+
+  learningId = 0;
+  setTimeout(loadButtonsHttp, 200);
+  safeRenderTable();   // cập nhật lại UI
+}
+function WsstopLearning() {
+  if (learningId === 0) return;
+
+  console.log("🛑 Stop learning ID =", learningId);
+
+
+  learningId = 0;
+  safeRenderTable();  
+}
+
+function toggleLearn(id) {
+
+  // 👉 nếu đang học chính nút này → STOP
+  if (learningId === id) {
+    stopLearning();
+    return;
+  }
+
+  // 👉 nếu đang học nút khác → stop trước
+  if (learningId > 0 && learningId !== id) {
+    stopLearning();
+  }
+
+
+  // 👉 bắt đầu học nút mới
+  learningId = id;
+
+  console.log("🎧 Start learning ID =", id);
+
+  wsSendSafe(({
+    cmd: "learn_button",
+    id: id
+  }));
+
+  safeRenderTable();
+}
+
+function updateCountdown(id, text){
+  const el = document.getElementById("cd_"+id);
+  if(el) el.innerText = text ? `⏳ ${text}s` : "";
+}
+function showCountdown(id, sec){
+  const el = document.getElementById("cd_" + id);
+  if(!el) return;
+  
+  if(sec > 0){
+    el.style.display = "block";
+    el.innerText = "⏳ " + sec + "s";
+  } else {
+    el.innerText = "";
+    el.style.display = "none";
+  }
+}
+
+
+function safeRenderTable() {
+  if (renderScheduled) return;
+  renderScheduled = true;
+
+ // requestAnimationFrame(() => {
+    
+    renderTable();
+    renderScheduled = false;
+ // });
+}
+function applyLearnResultDelta(d){
+  const b = buttons.find(x => x.id === d.id);
+  if (!b) return;
+
+  b.code = d.code;
+  b.type = d.src;
+  safeRenderTable();
+}
+/* ===== WS HANDLER ===== 
+ws.addEventListener("message", e=>{
+  const d=JSON.parse(e.data);
+
+  
+});*/
+function onPageButtonsShow(){
+ // wsSendSafe(({ cmd:"get_buttons" }));
+ loadButtonsHttp();
+}
+function onPageButtonsHide(){
+  wsSendSafe(({ cmd:"learn_stop" }));
+}
+function isValidRFCode(s) {
+  if (!s) return true; // cho phép rỗng
+
+  return s.split(";").every(x => {
+    x = x.trim();
+    // 0x + 2,4,6,8 hex digits
+    return /^0x([0-9a-fA-F]{2}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(x);
+  });
+}
+function loadButtonsHttp(){
+  fetch("/api/buttons", {
+    cache: "no-store"
+  })
+  .then(r => {
+    if (!r.ok) throw new Error("HTTP error");
+    return r.json();
+  })
+  .then(d => {
+    if (!Array.isArray(d.list)) {
+      console.error("Invalid button list", d);
+      return;
+    }
+    loadButtonList(d.list);   // dùng lại logic cũ
+  })
+  .catch(err => {
+    console.error("❌ Load buttons failed", err);
+    alert("Không tải được danh sách nút");
+  });
+}
+function playVoice(id){
+  wsSendSafe({
+    cmd: "test_voice",
+    id: id
+  });
+}
+function testRF(id){
+  wsSendSafe({
+    cmd: "test_rf",
+    id: id
+  });
+}
+</script>
+
+</section>
+<section id="page-home" class="page">
+
+
+  
+  <div id="callGrid" class="call-grid"></div>
+
+<style>
+/* ===== GRID ===== */
+.call-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  padding: 12px;
+  padding-bottom: 70px; /* chừa chỗ cho employeeBar */
+}
+
+.call-card {
+  background: #fff;
+  border-left: 6px solid #ccc;
+  border-radius: 2px;   /* 🔧 vuông hơn */
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ===== HEADER BAR ===== */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+
+  height: 34px;
+  line-height: 34px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  letter-spacing: .4px;
+}
+
+.card-header .title {
+  white-space: nowrap;
+}
+
+.card-header .time {
+  font-size: 12px;
+  opacity: 0.9;
+}
+/* ===== BODY ===== */
+.card-body {
+  padding: 8px 10px;
+  flex: 1;
+}
+
+/* ===== LOCATION ===== */
+.card-loc {
+  font-size: 18px;      /* 🔧 to hơn */
+  font-weight: 700;
+  text-align: left;     /* 🔧 căn trái */
+  margin-bottom: 6px;
+}
+
+.card-num {
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+/* ===== INFO ===== */
+.card-info {
+  font-size: 14px;
+  margin: 4px 0;
+  min-height: 18px; /* chống nhảy */
+}
+
+/* ===== TIME ===== */
+.card-time {
+  font-size: 12px;
+  color: #555;
+  text-align: center;
+  margin: 4px 0;
+}
+
+/* ===== ACTIONS ===== */
+.card-actions {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+}
+
+.card-actions button {
+  flex: 1;
+  padding: 6px 0;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Hủy bỏ – xám */
+.card-actions .danger {
+  background: #d9d9d9;
+  color: #000;
+  border: 1px solid #888;
+}
+
+/* Tiếp nhận – xanh nhạt */
+.card-actions .accept {
+  background: #cfe9f3;
+  color: #000;
+  border: 1px solid #4a90a4;
+}
+
+/* Hoàn tất – xanh lá */
+.card-actions .done {
+  background: #9af59a;
+  color: #000;
+  border: 1px solid #2e8b57;
+}
+.card-info.request {
+  font-weight: 500;
+}
+
+.card-info.status {
+  font-style: italic;
+  color: #666;
+}
+
+/* Card đã được tiếp nhận */
+.call-card.accepted {
+  background: #eef7fb; /* xanh lơ nhạt như PC */
+}
+.card-actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+/* ===== EMPLOYEE FOOTER BAR ===== */
+#employeeBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 52px;
+  background: #ffffff;
+  border-top: 1px solid #d1d5db;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+
+  z-index: 200;
+}
+
+/* input gọn */
+#employeeBar input {
+  flex: 1;
+  height: 36px;
+  font-size: 14px;
+}
+
+/* nút nhỏ */
+#employeeBar button {
+  height: 36px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+
+/* cảnh báo nhỏ, không chiếm chỗ */
+#employeeWarn {
+  font-size: 12px;
+  color: #b91c1c;
+  display: none;
+  white-space: nowrap;
+}
+@media (max-width: 768px) {
+  #employeeBar {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+
+</style>
+
+<script>
+/* ================= CONFIG ================= */
+const PRIORITY_CONFIG = {
+  1:{ color:"#3b82f6", title:"YÊU CẦU THƯỜNG" },
+  2:{ color:"#2e8b57", title:"YÊU CẦU HỖ TRỢ" },
+  3:{ color:"#f2c94c", title:"YÊU CẦU ƯU TIÊN" },
+  4:{ color:"#f97316", title:"YÊU CẦU KHẨN" },
+  5:{ color:"#ef4444", title:"🚨 BÁO ĐỘNG KHẨN CẤP" }
+};
+
+
+let activeCalls = {}; // id -> data
+const FINISH_STATUS = [
+  "Bị hủy bỏ",
+  "Đã hoàn tất",
+  "Quá thời gian"
+];
+
+/* ================= CARD ================= */
+
+function renderActiveCalls(activeList) {
+  const grid = document.getElementById("callGrid");
+  if (!grid) return;
+
+  const aliveIds = new Set();
+
+  activeList.forEach(item => {
+    // ❌ bỏ qua call đã kết thúc
+    if (FINISH_STATUS.includes(item.status)) {
+      return;
+    }
+
+    aliveIds.add(item.id);
+
+    addOrUpdateCallCard({
+      id: item.id,
+      loc: item.loc,
+      num: item.num,
+      req: item.request,
+      stt: item.status,
+      pri: item.priority,
+      time: item.time
+    });
+  });
+
+  // 🔥 XÓA CARD KHÔNG CÒN TRONG active[]
+  grid.querySelectorAll(".call-card").forEach(card => {
+    const id = parseInt(card.id.replace("call_", ""), 10);
+    if (!aliveIds.has(id)) {
+      card.remove();
+      delete activeCalls[id];
+    }
+  });
+}
+  
+ /*
+  function renderActiveCalls(activeList) {
+  const grid = document.getElementById("callGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";            // 🔥 reset DOM
+  activeCalls = {};               // reset cache
+
+  activeList.forEach(item => {
+    if (FINISH_STATUS.includes(item.status)) return;
+
+    addOrUpdateCallCard({
+      id: item.id,
+      loc: item.loc,
+      num: item.num,
+      req: item.request,
+      stt: item.status,
+      pri: item.priority,
+      time: item.time
+    });
+  });
+}
+*/
+function addOrUpdateCallCard(call) {
+  activeCalls[call.id] = call;
+  const hasEmp = !!localStorage.getItem("employee");
+  const cfg = PRIORITY_CONFIG[call.pri] || PRIORITY_CONFIG[1];
+
+  let card = document.getElementById("call_" + call.id);
+  if (!card) {
+    card = document.createElement("div");
+    card.id = "call_" + call.id;
+  }
+
+  // class theo trạng thái
+  card.className =
+    "call-card" +
+    (call.stt === "Đã được tiếp nhận" ? " accepted" : "");
+
+  card.style.borderLeftColor = cfg.color;
+
+  card.style.borderLeftColor = cfg.color;
+
+card.innerHTML = `
+  <div class="card-header" style="background:${cfg.color}">
+    <div class="title">${cfg.title}</div>
+    <div class="time">${extractTime(call.time)}</div>
+  </div>
+
+  <div class="card-body">
+    <div class="card-loc">${call.loc} - ${call.num}</div>
+
+    <div class="card-info request">${call.req || ""}</div>
+    <div class="card-info status">Trạng thái: ${call.stt || ""}</div>
+  </div>
+
+  <div class="card-actions">
+    <button class="danger" onclick="cancelCall(${call.id})">Hủy bỏ</button>
+    <button class="accept" onclick="acceptCall(${call.id})">Tiếp nhận</button>
+    <button class="done" onclick="finishCall(${call.id})">Hoàn tất</button>
+  </div>
+`;
+
+
+
+
+  /* ===== 📌 ĐẶT ĐOẠN CODE NÀY Ở ĐÂY ===== */
+  if (call.stt === "Đã được tiếp nhận") {
+    const btnCancel = card.querySelector(".danger");
+    if (btnCancel) btnCancel.setAttribute("disabled", true);
+  }
+
+  const grid = document.getElementById("callGrid");
+  if (!grid.contains(card)) {
+    grid.appendChild(card);
+  card.querySelectorAll(".card-actions button")
+  .forEach(b => b.disabled = !hasEmp);
+  }
+}
+function extractTime(t) {
+  if (!t) return "";
+
+  // tìm HH:mm:ss ở bất kỳ đâu trong chuỗi
+  const m = t.match(/\b\d{2}:\d{2}:\d{2}\b/);
+  return m ? m[0] : t;
+}
+
+function addCallCard(call){
+  console.log("🟢 addCallCard() input:", call);
+
+  activeCalls[call.id] = call;
+
+  const cfg = PRIORITY_CONFIG[call.pri] || PRIORITY_CONFIG[1];
+
+  let card = document.getElementById("call_" + call.id);
+  if (!card) {
+    card = document.createElement("div");
+    card.id = "call_" + call.id;
+    card.className = "call-card";
+  }
+
+  card.style.borderLeftColor = cfg.color;
+
+  card.innerHTML = `
+    <div class="card-header">${cfg.title}</div>
+    <div style="font-size:22px; font-weight:700;">${call.loc}</div>
+    <div style="font-size:22px; font-weight:700;">${call.num}</div>
+    <div>Request: ${call.req || ""}</div>
+    <div>Status: ${call.stt || ""}</div>
+    <div class="card-time">${call.time}</div>
+
+    <div class="card-actions">
+      <button onclick="acceptCall(${call.id})">Tiếp nhận</button>
+      <button onclick="finishCall(${call.id})">Hoàn tất</button>
+      <button class="danger" onclick="cancelCall(${call.id})">Hủy bỏ</button>
+    </div>
+  `;
+
+  const grid = document.getElementById("callGrid");
+  if (!grid) {
+    console.error("❌ callGrid NOT FOUND");
+    return;
+  }
+
+  if (!grid.contains(card)) {
+    grid.appendChild(card);
+  }
+}
+
+/* ================= ACTION ================= */
+function acceptCall(id){
+  if (!requireEmployee()) return;
+  const c = activeCalls[id];
+  if (!c) return;
+
+  sendAction(
+    id,
+    c.loc,
+    c.num,
+    "Đã được tiếp nhận",
+    c.req
+  );
+}
+
+function finishCall(id){
+  if (!requireEmployee()) return;
+  const c = activeCalls[id];
+  if (!c) return;
+
+  sendAction(
+    id,
+    c.loc,
+    c.num,
+    "Đã hoàn tất",
+    c.req
+  );
+
+  removeCall(id);
+}
+
+function cancelCall(id){
+  if (!requireEmployee()) return;
+  const c = activeCalls[id];
+  if (!c) return;
+
+  sendAction(
+    id,
+    c.loc,
+    c.num,
+    "Bị hủy bỏ",
+    c.req
+  );
+
+  removeCall(id);
+}
+
+function sendAction(id, loc, num, action, request){
+  if (!ws || ws.readyState !== WebSocket.OPEN) {
+    console.warn("WS not ready");
+    return;
+  }
+  const emp = localStorage.getItem("employee") || "";
+  const c = activeCalls[id];
+  if (!c) return;
+  const t = new Date().toISOString().slice(0,19).replace("T"," ");
+
+  const payload = {
+    cmd: "web_action",
+    id: id,
+    loc: loc,
+    num: num,
+    request: request,
+    priority: c.pri, 
+    action: "Thay đổi trạng thái từ web",
+    status: action,
+    source: "web",
+    time: t,
+    employee: emp,     // 🔥 LUÔN CÓ
+    sourceId: 0        // 🔒 web mặc định
+  };
+
+  console.log("📤 WS sendAction:", payload);
+  ws.send(JSON.stringify(payload));
+}
+
+
+function removeCall(id){
+  delete activeCalls[id];
+  const el = document.getElementById("call_"+id);
+  if(el) el.remove();
+}
+function saveEmployee() {
+  const v = employeeInput.value.trim();
+
+  if (!v) {
+    employeeWarn.style.display = "block";
+    return;
+  }
+
+  localStorage.setItem("employee", v);
+  employeeWarn.style.display = "none";
+
+  // 🔥 enable lại nút trên card
+  document.querySelectorAll(".card-actions button")
+    .forEach(b => b.disabled = false);
+
+  alert("✅ Đã lưu tên nhân viên");
+}
+
+function requireEmployee() {
+  const emp = localStorage.getItem("employee");
+  if (!emp || !emp.trim()) {
+    employeeWarn.style.display = "block";
+    employeeInput.focus();
+    return false;
+  }
+  employeeWarn.style.display = "none";
+  return true;
+}
+
+/* ================= WS HOOK (ví dụ) =================
+   Khi WS nhận JSON:
+   if (d.display && d.display.active) {
+      addCallCard({
+        id: d.display.id,
+        loc: d.display.loc,
+        num: d.display.num,
+        pri: d.display.priority,
+        func: d.display.request,
+        time: d.display.time
+      });
+   }
+
+document.addEventListener("DOMContentLoaded", () => {
+  showPage("page-home");
+});
+
+==================================================== */
+
+</script>
+<!-- ===== EMPLOYEE FOOTER ===== -->
+<div id="employeeBar">
+  <input
+    id="employeeInput"
+    placeholder="👤 Nhân viên trực..."
+  >
+  <button onclick="saveEmployee()">Lưu</button>
+
+  <span id="employeeWarn">
+    ⚠️ Nhập tên nhân viên
+  </span>
+</div>
+
+</section>
+
+<section id="page-history" class="page">
+
+  <div class="card">
+    <h3>📊 Lịch sử cuộc gọi</h3>
+  
+    <div class="history-bar">
+      <label>Ngày</label>
+      <input type="date" id="his_day">
+      <button onclick="loadHistory()">Xem lịch sử</button>
+      <button onclick="downloadHistory()">⬇️ Tải CSV</button>
+    </div>
+  </div>
+  
+  <div class="history-table-wrap">
+    <table id="historyTable">
+      <thead>
+        <tr>
+          <th>Thời gian</th>
+          <th>ID</th>
+          <th>Vị trí</th>
+          <th>Số</th>
+          <th>Action</th>
+          <th>Nội dung</th>
+          <th>Trạng thái</th>
+          <th>Priority</th>
+          <th>Nhân viên</th>
+          <th>Thiết bị</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  
+  
+  <script>
+    function loadHistory() {
+      const day = document.getElementById("his_day").value;
+      if (!day) {
+        alert("Chọn ngày");
+        return;
+      }
+    
+      fetch(`/api/history/day?date=${day}`)
+        .then(r => {
+          if (!r.ok) throw new Error("No history");
+          return r.text();
+        })
+        .then(csv => renderHistory(csv))
+        .catch(() => {
+          document.querySelector("#historyTable tbody").innerHTML =
+            `<tr><td colspan="8">Không có lịch sử</td></tr>`;
+        });
+    }
+    
+    function renderHistory(csv) {
+      const tbody = document.querySelector("#historyTable tbody");
+      tbody.innerHTML = "";
+    
+      // bỏ BOM nếu có
+      csv = csv.replace(/^\uFEFF/, "");
+    
+      const lines = csv.trim().split("\n");
+      lines.shift(); // bỏ header
+    
+      lines.forEach(line => {
+        const c = line.split(",");
+        if (c.length < 8) return;
+    
+        const tr = document.createElement("tr");
+    
+        const status = c[6].toLowerCase();
+        if (status.includes("chờ")) tr.className = "status-new";
+        else if (status.includes("tiếp nhận")) tr.className = "status-accept";
+        else if (status.includes("hoàn tất")) tr.className = "status-done";
+        else if (status.includes("hủy")) tr.className = "status-cancel";
+    
+        c.forEach(v => {
+          const td = document.createElement("td");
+          td.textContent = v;
+          tr.appendChild(td);
+        });
+    
+        tbody.appendChild(tr);
+      });
+    }
+    function downloadHistory() {
+  const d = document.getElementById("his_day").value;
+  if (!d) {
+    alert("Vui lòng chọn ngày");
+    return;
+  }
+
+  const url = `/api/history/day?date=${d}`;
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `history-${d}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+
+    // auto chọn hôm nay
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("his_day").value =
+        new Date().toISOString().slice(0,10);
+    });
+    </script>
+    
+  <style> 
+.history-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+#historyTable th {
+  background: #2563eb;
+  color: #fff;
+  padding: 8px;
+}
+
+#historyTable {
+  width: 100%;
+  min-width: 1000px;      /* 👈 tránh bảng co nhỏ */
+  border-collapse: collapse;
+  table-layout: fixed;    /* 👈 cột đều, không co */
+}
+
+
+tr.status-new    { background:#fffbe6 }
+tr.status-accept { background:#eef7ff }
+tr.status-done   { background:#f1f5f9 }
+tr.status-cancel { background:#fee2e2 }
+.history-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.history-toolbar input[type="date"] {
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.history-toolbar button {
+  padding: 7px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.history-toolbar button:nth-child(3) {
+  background: #2563eb;
+  color: white;
+}
+
+.history-toolbar button:nth-child(4) {
+  background: #16a34a;
+  color: white;
+}
+
+    
+    </style>
+</section>
+
+<section id="page-network" class="page">
+
+  <div class="card">
+    <h2>ESP32 WiFi Gateway</h2>
+
+    <label>WiFi</label>
+    <select id="ssid"></select>
+
+    <label>Mật khẩu</label>
+    <div class="input-group">
+      <input id="pass" type="password" placeholder="Nhập mật khẩu WiFi">
+      <span class="toggle-eye" onclick="togglePass()">👁</span>
+    </div>
+
+    <div class="status" id="info">
+      <div class="hint">
+        Thiết bị đang ở chế độ cấu hình.<br>
+        Vui lòng chọn WiFi và nhập mật khẩu.
+      </div>
+    </div>
+
+    <button onclick="save()">Lưu & Kết nối</button>
+  </div>
+
+<script>
+/* ===============================
+   NETWORK PAGE HANDLER
+   =============================== */
+function onWifiScan(d){
+  ssid.innerHTML = "";
+  d.list.forEach(w => {
+    const o = document.createElement("option");
+    o.value = w.ssid;
+    o.text  = `${w.ssid} (${w.rssi} dBm)`;
+    ssid.add(o);
+  });
+}
+
+function onWifiStatus(d){
+  let html = `
+    <div class="label">mDNS Access via browser </div>
+    <div class="link">${d.mdns}.local</div>
+  `;
+  if (d.connected && d.ip) {
+    html += `
+      <div class="label">IP WEBSOCKET used for PC APP</div>
+      <div class="link">ws://${d.mdns}:80/ws</div>
+    `;
+  }
+  info.innerHTML = html;
+}
+
+function save(){
+  ws.send(JSON.stringify({
+    cmd:"save_wifi",
+    ssid:ssid.value,
+    pass:pass.value
+  }));
+}
+
+function togglePass(){
+  pass.type = pass.type === "password" ? "text" : "password";
+}
+
+/* GỌI KHI MỞ PAGE NETWORK */
+function onPageNetworkShow(){
+  ws.send(JSON.stringify({ cmd:"scan" }));
+}
+function onPageNetworkHide(){
+  ws.send(JSON.stringify({ cmd:"scan_stop" }));
+}
+
+</script>
+
+
+</section>
+<section id="page-settings" class="page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="card">
+    <h3>⚙️ Cài đặt hệ thống</h3>
+    <p style="color:var(--muted)">
+      Cấu hình tích hợp, truyền thông và vận hành thiết bị
+    </p>
+  </div>
+
+  <!-- ===== INTEGRATION ===== -->
+  <div class="card">
+    <h4>🔗 Tích hợp & Ghi dữ liệu</h4>
+  
+    <label>Google Sheet URL</label>
+    <input id="cfg_sheet_url" placeholder="https://script.google.com/macros/...">
+  
+    <label>Sheet Name</label>
+    <input id="cfg_sheet_name" placeholder="Sheet1">
+  
+    <label>NTFY Topic</label>
+    <input id="cfg_ntfy_topic" placeholder="call-system-alert">
+  
+    <label class="switch">
+      <input type="checkbox" id="cfg_enable_report">
+      <span>Enable gửi dữ liệu ra ngoài</span>
+    </label>
+  
+    <div style="display:flex; gap:10px; margin-top:12px">
+      <button onclick="saveIntegration()">💾 Lưu</button>
+      <button onclick="testSheet()">🧪 Test Sheet</button>
+      <button onclick="testNtfy()">🧪 Test NTFY</button>
+    </div>
+  
+    <div id="testResult"
+         style="margin-top:10px; font-size:13px; color:var(--muted)">
+    </div>
+  </div>
+  
+
+  <!-- ===== RF / LORA ===== -->
+  <div class="card">
+    <h4>📡 RF / LoRa / Repeater</h4>
+  
+    <div class="radio-grid">
+  
+      <!-- ===== CỘT 1: RF ===== -->
+      <div class="radio-col">
+        <h5>📻 RF</h5>
+  
+        <label class="switch">
+          <input type="checkbox" id="cfg_rf_tx">
+          <span>Enable RF Transmit</span>
+        </label>
+  
+        <label class="switch">
+          <input type="checkbox" id="cfg_rf_repeater">
+          <span>Enable RF Repeater</span>
+        </label>
+  
+        <label class="switch">
+          <input type="checkbox" id="cfg_active_sos">
+          <span>Active SOS Lamp</span>
+        </label>
+  
+        
+      </div>
+  
+      <!-- ===== CỘT 2: LoRa ===== -->
+      <div class="radio-col">
+        <h5>📡 LoRa</h5>
+  
+        <label class="switch">
+          <input type="checkbox" id="cfg_lora_repeater">
+          <span>Enable LoRa Repeater</span>
+        </label>
+  
+        <label class="switch">
+          <input type="checkbox" id="cfg_rftolora_repeater">
+          <span>RF → LoRa Repeater</span>
+        </label>
+      </div>
+  
+      <!-- ===== CỘT 3: SAFETY / LOOP ===== -->
+      <div class="radio-col">
+        <h5>🛡️ An toàn</h5>
+  
+        <label class="switch">
+          <input type="checkbox" id="cfg_anti_loop">
+          <span>Anti-loop Repeater</span>
+        </label>
+  
+        <button class="btn-save" onclick="saveRadio()">💾 Lưu RF / LoRa</button>
+        <!-- 🔥 SOS TEST -->
+        <div class="sos-test sos-bottom">
+          <button onclick="testSOS(true)">🚨 SOS ON</button>
+          <button class="btn-danger" onclick="testSOS(false)">🛑 SOS OFF</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
+
+  <div class="card">
+    <h4>⏱️ Cài đặt cuộc gọi</h4>
+  
+    <label>Thời gian chờ (giây)</label>
+    <input id="cfg_call_timeout" type="number" min="10" step="10">
+  
+    <button onclick="saveCallSetting()">💾 Lưu cài đặt cuộc gọi</button>
+  </div>
+  
+  <!-- ===== SYSTEM ===== -->
+  <div class="card">
+    <h4>🧠 Hệ thống</h4>
+
+    <label>Tên thiết bị</label>
+    <input value="CALL-GATEWAY-01" disabled>
+
+    <label>Firmware version</label>
+    <input id="fwVersion" value="--" disabled>
+
+    <div style="display:flex; gap:10px; margin-top:12px">
+      <button onclick="rebootDevice()">🔄 Khởi động lại</button>
+      <button class="btn-update" onclick="updateFirmware()">
+        ⬆️ Cập nhật firmware
+      </button>
+      <button class="btn-danger" onclick="resetConfig()">🧹 Reset cấu hình</button>
+    </div>
+    <div id="otaOverlay" class="ota-overlay" style="display:none">
+      <div class="ota-overlay-box">
+        <h3>⬆️ Đang cập nhật firmware</h3>
+    
+        <div class="ota-progress-wrap">
+          <div class="ota-progress-bar">
+            <div class="ota-progress-fill" id="otaOverlayBar"></div>
+          </div>
+          <div class="ota-progress-text" id="otaOverlayPercent">0%</div>
+        </div>
+    
+        <div class="ota-progress-status" id="otaOverlayStatus">
+          Vui lòng không tắt nguồn
+        </div>
+      </div>
+    </div>
+    
+    
+  </div>
+
+</section>
+<style>
+  /* ===== SWITCH ===== */
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.switch input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
+/* ===== DANGER BUTTON ===== */
+.btn-danger {
+  background: var(--danger);
+}
+.btn-danger:hover {
+  background: #b91c1c;
+}
+.btn-update {
+  background: #2563eb;
+  color: #fff;
+}
+
+.btn-update:hover {
+  background: #1d4ed8;
+}
+.ota-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+}
+
+.ota-overlay-box {
+  background: #fff;
+  padding: 26px 28px;
+  border-radius: 16px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+}
+
+.ota-progress-wrap {
+  margin: 18px 0 10px;
+}
+
+.ota-progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ota-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#2563eb,#1d4ed8);
+  transition: width .25s ease;
+}
+
+.ota-progress-text {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ota-progress-status {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #555;
+}
+.radio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 10px;
+}
+
+.radio-col {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px;
+  background: #fafafa;
+}
+
+.radio-col h5 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.sos-test {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-save {
+  margin-top: 16px;
+  width: 100%;
+}
+
+/* 📱 Mobile tự động về 1 cột */
+@media (max-width: 900px) {
+  .radio-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>
+<script>
+  function loadSystemInfo() {
+  fetch("/api/system/info", { cache: "no-store" })
+    .then(r => {
+      if (!r.ok) throw new Error("HTTP error");
+      return r.json();
+    })
+    .then(d => {
+      if (d.firmware) {
+        document.getElementById("fwVersion").value = "v" + d.firmware;
+      }
+    })
+    .catch(err => {
+      console.error("❌ Load firmware version failed", err);
+      document.getElementById("fwVersion").value = "--";
+    });
+}
+
+function updateFirmware() {
+  if (!confirm("⬆️ Cập nhật firmware?\nThiết bị sẽ tự khởi động lại sau khi cập nhật.")) {
+    return;
+  }
+  showToast("🔍 Đang kiểm tra firmware...");
+  wsSendSafe({
+    cmd: "ota_check"
+  });
+
+ // alert("🚀 Đã gửi lệnh cập nhật firmware.\nVui lòng chờ thiết bị reboot.");
+} 
+function saveIntegration(){
+  wsSendSafe({
+    cmd: "save_integration",
+    sheet_url: cfg_sheet_url.value,
+    sheet_name: cfg_sheet_name.value,
+    ntfy_topic: cfg_ntfy_topic.value,
+    enable: cfg_enable_report.checked
+  });
+}
+
+function saveRadio(){
+  wsSendSafe({
+    cmd: "save_radio",
+    rf_tx: cfg_rf_tx.checked,
+    rf_repeater: cfg_rf_repeater.checked,
+    lora_repeater: cfg_lora_repeater.checked,
+    rftolora_repeater: cfg_rftolora_repeater.checked,
+    anti_loop: cfg_anti_loop.checked,
+    active_sos: cfg_active_sos.checked 
+  });
+}
+function testSOS(on){
+  wsSendSafe({
+    cmd: "test_sos_lamp",
+    on: !!on
+  });
+
+  showToast(on ? "🚨 SOS Lamp ON" : "🛑 SOS Lamp OFF");
+}
+
+
+function saveCallSetting(){
+  wsSendSafe({
+    cmd: "save_call_setting",
+    timeout: parseInt(cfg_call_timeout.value || 0)
+  });
+}
+
+function rebootDevice(){
+  if(!confirm("Khởi động lại thiết bị?")) return;
+  wsSendSafe({ cmd:"reboot" });
+}
+
+function resetConfig(){
+  if(!confirm("⚠️ Reset toàn bộ cấu hình?")) return;
+  wsSendSafe({ cmd:"factory_reset" });
+}
+function applySettings(d){
+  if (!d.integration || !d.radio|| !d.call) return;
+
+  // ===== Integration =====
+  cfg_sheet_url.value     = d.integration.sheet_url || "";
+  cfg_sheet_name.value    = d.integration.sheet_name || "";
+  cfg_ntfy_topic.value    = d.integration.ntfy_topic || "";
+  cfg_enable_report.checked = !!d.integration.enable_report;
+
+  // ===== Radio =====
+cfg_lora_repeater.checked     = !!d.radio.lora_repeater;
+cfg_rf_tx.checked             = !!d.radio.rf_tx;
+cfg_rf_repeater.checked       = !!d.radio.rf_repeater;
+cfg_rftolora_repeater.checked = !!d.radio.rftolora_repeater; // 🔥 NEW
+cfg_anti_loop.checked         = !!d.radio.anti_loop;
+cfg_active_sos.checked        = !!d.radio.active_sos;
+cfg_call_timeout.value = d.call.timeout;
+  console.log("⚙️ Settings applied");
+}
+function showSettingsSaved(group){
+ // let msg = "Đã lưu cấu hình";
+
+  if (group === "integration") showToast("✅ Đã lưu cấu hình tích hợp"); 
+  if (group === "radio")       showToast("✅ Đã lưu cấu hình RF / LoRa"); 
+
+ // alert(msg);
+}
+function testSheet(){
+  testResult.innerText = "⏳ Đang test Google Sheet...";
+  wsSendSafe({ cmd:"test_sheet" });
+}
+
+function testNtfy(){
+  testResult.innerText = "⏳ Đang test NTFY...";
+  wsSendSafe({ cmd:"test_ntfy" });
+}
+function showTestResult(d){
+  if (!d.target) return;
+
+  let msg = "";
+  let color = "var(--muted)";
+
+  if (d.ok) {
+    msg = `✅ ${d.target} OK`;
+    color = "var(--success)";
+  } else {
+    msg = `❌ ${d.target} FAIL: ${d.error || "unknown"}`;
+    color = "var(--danger)";
+  }
+
+  testResult.innerText = msg;
+  testResult.style.color = color;
+}
+
+function onPageSettingsShow(){
+  wsSendSafe({ cmd:"get_settings" });
+  loadSystemInfo();
+}
+let otaLocked = false;
+
+function lockUIForOTA() {
+  otaLocked = true;
+  document.getElementById("otaOverlay").style.display = "flex";
+}
+
+function unlockUIAfterOTA() {
+  otaLocked = false;
+  document.getElementById("otaOverlay").style.display = "none";
+}
+function updateWebUI(){
+  if (!confirm("🌐 Cập nhật giao diện Web?\nThiết bị sẽ tải index.html mới từ GitHub.")) {
+    return;
+  }
+
+  lockUIForOTA();
+  document.getElementById("otaOverlayStatus").innerText =
+    "🌐 Đang cập nhật giao diện Web...";
+
+  wsSendSafe({
+    cmd: "update_web_ui"
+  });
+}
+
+</script>
+<section id="page-audio" class="page">
+
+  <div class="card">
+    <h3>🔊 Cài đặt âm thanh</h3>
+    <p style="color:var(--muted)">
+      Quản lý file âm thanh & kiểm tra loa
+    </p>
+  </div>
+
+  <div class="card">
+    <h4>⬆️ Upload âm thanh lên SD Card</h4>
+  
+    <input type="file"
+           id="audioFile"
+           accept=".wav">
+  
+    <div style="margin-top:12px; display:flex; gap:8px">
+      <button onclick="uploadAudio()">Upload</button>
+      <span id="uploadStatus" style="font-size:13px; color:var(--muted)"></span>
+    </div>
+  </div>
+  
+
+  <div class="card">
+    <h4>📂 Danh sách âm thanh (SD Card)</h4>
+  
+    <table id="audioTable">
+      <thead>
+        <tr>
+          <th>Tên file</th>
+          <th>Thời lượng</th>
+          <th>Size</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  
+
+</section>
+<script>
+let audioOffset = 0;
+const AUDIO_LIMIT = 20;
+let audioTotal = 0;
+
+function playTestAudio(){
+  wsSendSafe({
+    cmd: "test_audio",
+    file: document.getElementById("audioList").value
+  });
+}
+
+function stopTestAudio(){
+  wsSendSafe({ cmd: "stop_audio" });
+}
+
+
+
+function onPageAudioShow(){
+  audioOffset = 0;
+  document.querySelector("#audioTable tbody").innerHTML = "";
+ // loadMoreAudio();
+ loadAudioListHttp();
+}
+function loadAudioListHttp(){
+  fetch("/api/audio/list", { cache: "no-store" })
+    .then(r => {
+      if (!r.ok) throw new Error("HTTP error");
+      return r.json();
+    })
+    .then(d => {
+      if (!Array.isArray(d.files)) {
+        console.error("Invalid audio list", d);
+        return;
+      }
+
+      const tb = document.querySelector("#audioTable tbody");
+      tb.innerHTML = "";
+      renderAudioList(d.files, false);
+    })
+    .catch(err => {
+      console.error(err);
+      alert("❌ Không tải được danh sách audio");
+    });
+}
+
+function loadMoreAudio(){
+  if (currentPage !== "audio") {
+    console.log("⛔ Skip list_audio, not in audio page");
+    return;
+  }
+  wsSendSafe({
+    cmd: "list_audio",
+    offset: audioOffset,
+    limit: AUDIO_LIMIT
+  });
+}
+function renderAudioList(files, append){
+  const tb = document.querySelector("#audioTable tbody");
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.name}</td>
+      <td>${f.duration || "--"}</td>
+      <td>${formatSize(f.size)}</td>
+      <td>
+        <div class="audio-actions">
+          <button onclick="audioPlay('${f.name}')">▶️</button>
+          <button onclick="audioStop()">⏹</button>
+          <button onclick="audioRename('${f.name}')">✏️</button>
+          <button onclick="audioDelete('${f.name}')">🗑</button>
+        </div>
+      </td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+function audioPlay(file){
+  wsSendSafe({
+    cmd: "play_audio",
+    file: file
+  });
+}
+
+function audioStop(){
+  wsSendSafe({ cmd: "stop_audio" });
+}
+
+function audioRename(oldName){
+  const newName = prompt("Tên file mới:", oldName);
+  if(!newName || newName === oldName) return;
+
+  wsSendSafe({
+    cmd: "rename_audio",
+    old: oldName,
+    name: newName
+  });
+  setTimeout(loadAudioListHttp, 200);
+}
+
+function audioDelete(name){
+  if(!confirm(`Xóa file "${name}" ?`)) return;
+
+  wsSendSafe({
+    cmd: "delete_audio",
+    file: name
+  });
+  setTimeout(loadAudioListHttp, 200);
+}
+function formatSize(bytes){
+  if(bytes < 1024) return bytes + " B";
+  if(bytes < 1024*1024) return (bytes/1024).toFixed(1) + " KB";
+  return (bytes/1024/1024).toFixed(2) + " MB";
+}
+function uploadAudio(){
+  const f = document.getElementById("audioFile").files[0];
+  if(!f){
+    alert("Chưa chọn file");
+    return;
+  }
+
+  const form = new FormData();
+  form.append("file", f);
+
+  uploadStatus.innerText = "⏳ Đang upload...";
+
+  fetch("/upload_audio", {
+    method: "POST",
+    body: form
+  })
+  .then(r => r.text())
+  .then(t => {
+    uploadStatus.innerText = "✅ Upload xong";
+  //  wsSendSafe({ cmd:"list_audio", offset:0, limit:20 });
+  loadAudioListHttp();
+  })
+  .catch(err => {
+    console.error(err);
+    uploadStatus.innerText = "❌ Upload lỗi";
+  });
+}
+
+
+</script>
+<style>
+#audioTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+#audioTable th,
+#audioTable td {
+  padding: 8px 6px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+
+#audioTable th {
+  font-weight: 700;
+  text-align: left;
+}
+
+#audioTable td {
+  vertical-align: middle;
+}
+
+#audioTable td:last-child {
+  text-align: center;
+}
+
+.audio-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.audio-actions button {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+
+</style>

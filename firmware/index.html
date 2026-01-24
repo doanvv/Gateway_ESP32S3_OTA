@@ -2771,14 +2771,15 @@ function updateWebUI(){
     return;
   }
 
-  lockUIForOTA();
-  document.getElementById("otaOverlayStatus").innerText =
-    "🌐 Đang cập nhật giao diện Web...";
-
-  wsSendSafe({
+  wsSendSafe({                // ✅ GỬI TRƯỚC
     cmd: "update_web_ui"
   });
+
+  lockUIForOTA();             // ✅ KHÓA SAU
+  document.getElementById("otaOverlayStatus").innerText =
+    "🌐 Đang cập nhật giao diện Web...";
 }
+
 
 </script>
 <section id="page-audio" class="page">
